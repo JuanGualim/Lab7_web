@@ -48,6 +48,13 @@
 
     const BOARD_SIZE = 20;
 
+    function getRamdomPosition() {
+        return {
+            x: Math.floor(Math.random() * BOARD_SIZE),
+            y: Math.floor(Math.random() * BOARD_SIZE)
+        }
+    }
+
 
     // Componente principal
     function Game() {
@@ -58,6 +65,7 @@
         ]);
 
         const [direction, setDirection] = useState('RIGHT');
+        const [food, setFood] = useState(getRamdomPosition());
         
         // Loop del juego
         useEffect(() => {
@@ -66,7 +74,7 @@
             }, 200);
 
             return () => clearInterval(interval);
-        }, [snake, direction]);
+        }, [snake, direction, food]);
 
         // Control de teclado
         useEffect(() => {
@@ -121,22 +129,27 @@
             <div>
                 <h1>Snake Game</h1>
                 <Score />
-                <Board snake={snake} />
+                <Board snake={snake} food={food} />
             </div>
         );
     }
 
     // Tablero
-    function Board({ snake }) {
+    function Board({ snake, food }) {
         const cells = [];
         for (let y = 0; y < BOARD_SIZE; y++) {
             for (let x = 0; x < BOARD_SIZE; x++) {
                 const isSnake = snake.some(segment => segment.x === x && segment.y === y);
+                const isFood = food.x === x && food.y === y;
+
+                let className = 'cell';
+                if (isSnake) className += ' snake';
+                else if (isFood) className += ' food';
 
                 cells.push(
                     <div
                         key={`${x}-${y}`}
-                        className={`cell ${isSnake ? 'snake' : ''}`}
+                        className= {className}
                     ></div>
                 );
             }
