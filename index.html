@@ -48,13 +48,51 @@
 
     const BOARD_SIZE = 20;
 
+
     // Componente principal
     function Game() {
         const [snake, setSnake] = useState([
             { x: 10, y: 10 },
             { x: 9, y: 10 },
             { x: 8, y: 10 }
-        ])
+        ]);
+
+        const [direction, setDirection] = useState('RIGHT');
+        
+        // Loop del juego
+        useEffect(() => {
+            const interval = setInterval(() => {
+                moveSnake();
+            }, 200);
+
+            return () => clearInterval(interval);
+        }, [snake, direction]);
+
+        function moveSnake () {
+            const head = snake[0];
+            let newHead;
+
+            switch (direction) {
+                case 'UP':
+                    newHead = { x: head.x, y: head.y - 1 };
+                    break;
+                case 'DOWN':
+                    newHead = { x: head.x, y: head.y + 1 };
+                    break;
+                case 'LEFT':
+                    newHead = { x: head.x - 1, y: head.y };
+                    break;
+                case 'RIGHT':
+                    newHead = { x: head.x + 1, y: head.y };
+                    break;
+                default:
+                    return;
+            }
+
+            const newSnake = [newHead, ...snake.slice(0, -1)];
+            setSnake(newSnake);
+        }
+
         return (
             <div>
                 <h1>Snake Game</h1>
