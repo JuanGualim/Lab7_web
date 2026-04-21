@@ -46,24 +46,36 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
+    const BOARD_SIZE = 20;
+
     // Componente principal
     function Game() {
-      return (
-        <div>
-          <h1>Snake Game</h1>
-          <Score />
-          <Board />
-        </div>
-      );
+        return (
+            <div>
+            <h1>Snake Game</h1>
+            <Score />
+            <Board />
+            </div>
+        );
     }
 
     // Tablero
     function Board() {
-      return (
-        <div className="board">
-          {/* Aquí irá la grilla */}
-        </div>
-      );
+        const cells = [];
+        for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++){
+            cells.push(<div key={i} className= "cell"></div>);
+        }
+        return (
+            <div 
+                className="board"
+                style = {{
+                    gridTemplateColumns: `repeat(${BOARD_SIZE}, 20px)`
+                }}
+            >
+                {cells}
+            
+            </div>
+        );
     }
 
     // Serpiente
