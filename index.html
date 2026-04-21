@@ -50,20 +50,34 @@
 
     // Componente principal
     function Game() {
+        const [snake, setSnake] = useState([
+            { x: 10, y: 10 },
+            { x: 9, y: 10 },
+            { x: 8, y: 10 }
+        ])
         return (
             <div>
-            <h1>Snake Game</h1>
-            <Score />
-            <Board />
+                <h1>Snake Game</h1>
+                <Score />
+                <Board snake={snake} />
             </div>
         );
     }
 
     // Tablero
-    function Board() {
+    function Board({ snake }) {
         const cells = [];
-        for (let i = 0; i < BOARD_SIZE * BOARD_SIZE; i++){
-            cells.push(<div key={i} className= "cell"></div>);
+        for (let y = 0; y < BOARD_SIZE; y++) {
+            for (let x = 0; x < BOARD_SIZE; x++) {
+            const isSnake = snake.some(segment => segment.x === x && segment.y === y);
+
+            cells.push(
+                <div
+                key={`${x}-${y}`}
+                className={`cell ${isSnake ? 'snake' : ''}`}
+                ></div>
+            );
+            }
         }
         return (
             <div 
