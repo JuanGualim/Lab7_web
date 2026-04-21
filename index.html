@@ -38,6 +38,13 @@
     .food {
       background-color: red;
     }
+
+    button {
+        padding: 10px 15px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -55,15 +62,19 @@
         }
     }
 
-
-    // Componente principal
-    function Game() {
-        const [snake, setSnake] = useState([
+    function getInitialSnake() {
+        return [
             { x: 10, y: 10 },
             { x: 9, y: 10 },
             { x: 8, y: 10 }
-        ]);
+        ];
+    }
 
+
+    // Componente principal
+    function Game() {
+
+        const [snake, setSnake] = useState(getInitialSnake());
         const [direction, setDirection] = useState('RIGHT');
         const [food, setFood] = useState(getRamdomPosition());
         const [score, setScore] = useState(0);
@@ -71,12 +82,15 @@
         
         // Loop del juego
         useEffect(() => {
+            
+            if (gameOver) return;
+
             const interval = setInterval(() => {
                 moveSnake();
             }, 200);
 
             return () => clearInterval(interval);
-        }, [snake, direction, food]);
+        }, [snake, direction, food, gameOver]);
 
         // Control de teclado
         useEffect(() => {
@@ -101,6 +115,14 @@
             window.addEventListener('keydown', handleKeyDown);
             return () => window.removeEventListener('keydown', handleKeyDown);
         }, [direction]);
+
+        function resetGame() {
+            setSnake(getInitialSnake());
+            setDirection('RIGHT');
+            setFood(getRamdomPosition());
+            setScore(0);
+            setGameOver(false);
+        }
 
         function checkCollision(head, snakeBody){
             // Verificar colisión con paredes
@@ -161,7 +183,12 @@
         return (
             <div>
                 <h1>Snake Game</h1>
-                {gameOver && <h2>💀 Game Over!</h2>}
+                {gameOver && (
+                    <div>
+                        <h2>💀 Game Over!</h2>
+                        <button onClick={resetGame}>Reiniciar</button>
+                    </div>
+                )}
                 <Score score={score} />
                 <Board snake={snake} food={food} />
             </div>
@@ -201,15 +228,6 @@
         );
     }
 
-    // Serpiente
-    function Snake() {
-      return null; // Se renderizará dentro del Board
-    }
-
-    // Comida
-    function Food() {
-      return null; // Se renderizará dentro del Board
-    }
 
     // Puntaje
     function Score({ score }) {
