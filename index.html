@@ -11,6 +11,34 @@
   <!-- Babel para JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #111;
+      color: white;
+    }
+
+    .board {
+      display: grid;
+      margin: 20px auto;
+      background-color: #222;
+    }
+
+    .cell {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #333;
+    }
+
+    .snake {
+      background-color: limegreen;
+    }
+
+    .food {
+      background-color: red;
+    }
+  </style>
 </head>
 <body>
   <div id="root"></div>
