@@ -66,6 +66,7 @@
 
         const [direction, setDirection] = useState('RIGHT');
         const [food, setFood] = useState(getRamdomPosition());
+        const [score, setScore] = useState(0);
         
         // Loop del juego
         useEffect(() => {
@@ -121,14 +122,26 @@
                     return;
             }
 
-            const newSnake = [newHead, ...snake.slice(0, -1)];
+            // Verificar si serpiente come
+            const isEating = newHead.x === food.x && newHead.y === food.y;
+
+            let newSnake;
+
+            if (isEating) {
+                newSnake = [newHead, ...snake];
+                setFood(getRamdomPosition());
+                setScore(score + 1);
+            } else {
+                newSnake = [newHead, ...snake.slice(0, -1)];
+            }
+
             setSnake(newSnake);
         }
 
         return (
             <div>
                 <h1>Snake Game</h1>
-                <Score />
+                <Score score={score} />
                 <Board snake={snake} food={food} />
             </div>
         );
@@ -178,8 +191,8 @@
     }
 
     // Puntaje
-    function Score() {
-      return <h2>Puntaje: 0</h2>;
+    function Score({ score }) {
+      return <h2>Puntaje: {score}</h2>;
     }
 
     // Render
