@@ -79,6 +79,7 @@
         const [food, setFood] = useState(getRamdomPosition());
         const [score, setScore] = useState(0);
         const [gameOver, setGameOver] = useState(false);
+        const [speed, setSpeed] = useState(200);
         
         // Loop del juego
         useEffect(() => {
@@ -87,10 +88,10 @@
 
             const interval = setInterval(() => {
                 moveSnake();
-            }, 200);
+            }, speed);
 
             return () => clearInterval(interval);
-        }, [snake, direction, food, gameOver]);
+        }, [snake, direction, food, gameOver, speed]);
 
         // Control de teclado
         useEffect(() => {
@@ -122,6 +123,7 @@
             setFood(getRamdomPosition());
             setScore(0);
             setGameOver(false);
+            setSpeed(200);
         }
 
         function checkCollision(head, snakeBody){
@@ -173,6 +175,7 @@
                 newSnake = [newHead, ...snake];
                 setFood(getRamdomPosition());
                 setScore(score + 1);
+                setSpeed(prev => Math.max(50, prev - 10));
             } else {
                 newSnake = [newHead, ...snake.slice(0, -1)];
             }
@@ -230,8 +233,13 @@
 
 
     // Puntaje
-    function Score({ score }) {
-      return <h2>Puntaje: {score}</h2>;
+    function Score({ score, speed }) {
+      return (
+        <div>
+          <h2>Puntaje: {score}</h2>
+          <p>Velocidad: {speed}</p>
+        </div>
+      );
     }
 
     // Render
